@@ -1,0 +1,17 @@
+<h1>Welcome to the Social Media Scheduler</h1>
+
+<% if logged_in? %>
+  <h2>Hello, <%= current_user.name %>!</h2>
+  <p>What would you like to do?</p>
+  
+  <%= link_to "Create a New Post", new_post_path %> |
+  <%= link_to "View My Posts", posts_path %>
+  <hr>
+  <%= button_to "Log Out", logout_path, method: :delete %>
+
+<% else %>
+  <p>Please log in to continue.</p>
+  
+ 
+  <%= button_to "Login with LinkedIn", "/auth/linkedin", method: :post, data: { turbo: false } %>
+<% end %>
