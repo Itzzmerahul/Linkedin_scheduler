@@ -37,8 +37,8 @@ end
 # Now, configure the middleware with our patched strategy.
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :linkedin,
-           '86nulgqb64smae',
-           'WPL_AP1.Q27pFeMhjHlgxrtF.M/cmzQ==',
+           '86idewoxv5y4e4',
+           'WPL_AP1.F6Y4j96K3AKteuxE.MvVP0Q==',
            scope: 'openid profile email'
   
 end
