@@ -33,11 +33,12 @@ class OmniAuth::Strategies::LinkedIn
   uid { raw_info['sub'] }
 end
 
-
+puts "--- OMNIAUTH INITIALIZER IS RUNNING ---"
 # Now, configure the middleware with our patched strategy.
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :linkedin,
            '86nulgqb64smae',
            'WPL_AP1.Q27pFeMhjHlgxrtF.M/cmzQ==',
            scope: 'openid profile email'
+  puts "--- OmniAuth LinkedIn provider configured ---"
 end
