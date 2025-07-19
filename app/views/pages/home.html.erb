@@ -13,5 +13,5 @@
   <p>Please log in to continue.</p>
   
  
-  <%= link_to "Login with LinkedIn", "/auth/linkedin", method: :get %>
+  <%= button_to "Login with LinkedIn", "/auth/linkedin", data: { turbo: false } %>
 <% end %>
