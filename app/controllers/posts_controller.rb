@@ -1,5 +1,3 @@
-# app/controllers/posts_controller.rb
-
 class PostsController < ApplicationController
   before_action :require_login
   before_action :set_post, only: %i[ show edit update destroy ]
@@ -25,13 +23,10 @@ class PostsController < ApplicationController
 
   # POST /posts
   def create
+    # Build the post on behalf of the current user
     @post = current_user.posts.build(post_params)
 
     if @post.save
-      # Enqueue publish job if scheduled
-      if @post.status == 'scheduled' && @post.publish_at.present?
-        PostPublisherJob.set(wait_until: @post.publish_at).perform_later(@post)
-      end
       redirect_to @post, notice: "Post was successfully created."
     else
       render :new, status: :unprocessable_entity
@@ -41,10 +36,6 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1
   def update
     if @post.update(post_params)
-      # Enqueue publish job if scheduled
-      if @post.status == 'scheduled' && @post.publish_at.present?
-        PostPublisherJob.set(wait_until: @post.publish_at).perform_later(@post)
-      end
       redirect_to @post, notice: "Post was successfully updated."
     else
       render :edit, status: :unprocessable_entity
@@ -58,8 +49,6 @@ class PostsController < ApplicationController
   end
 
   private
-
-    # Use callbacks to share common setup or constraints between actions.
     def set_post
       # Find the post ONLY from within the current user's posts
       @post = current_user.posts.find(params[:id])
@@ -67,8 +56,13 @@ class PostsController < ApplicationController
       redirect_to posts_path, alert: "Post not found."
     end
 
-    # Only allow a list of trusted parameters through.
     def post_params
       params.require(:post).permit(:content, :publish_at, :status)
+    end
+
+    def require_login
+      unless current_user
+        redirect_to root_path, alert: "You must be logged in to do that."
+      end
     end
 end
